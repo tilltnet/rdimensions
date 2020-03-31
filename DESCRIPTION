@@ -1,0 +1,18 @@
+Package: rdimensions
+Type: Package
+Title: Access dimensions.ai API
+Version: 0.1.0
+Author: person("Till", "Krenz", email = "egor@tillt.net",
+    role = c("aut", "cre"))
+Maintainer: person("Till", "Krenz", email = "egor@tillt.net",
+    role = c("aut", "cre"))
+Description: Still in early development.
+License: AGPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat (>= 2.1.0)
+Imports: 
+    httr,
+    magrittr
+RoxygenNote: 7.0.2
