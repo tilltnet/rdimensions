@@ -2,10 +2,9 @@ Package: rdimensions
 Type: Package
 Title: Access dimensions.ai API
 Version: 0.1.0
-Author: person("Till", "Krenz", email = "egor@tillt.net",
+Author: person("Till", "Krenz", email = "rdimensions@tillt.net",
     role = c("aut", "cre"))
-Maintainer: person("Till", "Krenz", email = "egor@tillt.net",
-    role = c("aut", "cre"))
+Maintainer: Till Krenz <rdimensions@tillt.net>
 Description: Still in early development.
 License: AGPL-3
 Encoding: UTF-8
