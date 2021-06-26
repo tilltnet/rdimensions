@@ -1,7 +1,7 @@
 Package: rdimensions
 Type: Package
 Title: Access dimensions.ai API
-Version: 0.1.0
+Version: 0.2.0
 Author: person("Till", "Krenz", email = "rdimensions@tillt.net",
     role = c("aut", "cre"))
 Maintainer: Till Krenz <rdimensions@tillt.net>
@@ -15,6 +15,7 @@ Imports:
     httr,
     magrittr,
     data.table,
-    igraph,
+    igraph
+Depends:
     dplyr
 RoxygenNote: 7.1.1
