@@ -15,5 +15,6 @@ Imports:
     httr,
     magrittr,
     data.table,
-    igraph
+    igraph,
+    dplyr
 RoxygenNote: 7.1.1
