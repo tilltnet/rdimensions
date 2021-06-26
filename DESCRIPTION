@@ -13,5 +13,7 @@ Suggests:
     testthat (>= 2.1.0)
 Imports: 
     httr,
-    magrittr
-RoxygenNote: 7.0.2
+    magrittr,
+    data.table,
+    igraph
+RoxygenNote: 7.1.1

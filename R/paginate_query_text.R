@@ -1,6 +1,6 @@
 #' Create a pagination character vector to add to a query with more than 1000 results
 #' @export
-paginate_query_text <- function(query_text, page_length = 1000, session_token = NULL) {
+paginate_query_text <- function(query_text, page_length = 1000, session_token = getOption("dimensions_token")) {
   query_text <- pasta(query_text)
   result_count <- dimensions_request(dsl_query = query_text, session_token = session_token)$`_stats`$total_count
   query_text <- strsplit(query_text, " limit")[[1]][1]
@@ -11,6 +11,7 @@ paginate_query_text <- function(query_text, page_length = 1000, session_token = 
   paste(query_text, "limit", page_length, "skip", skips)
 }
 
+#' @export
 pasta <-
   function(...)
     paste0(stringr::str_squish(gsub("\n", "", list(...))), collapse = "")
@@ -33,6 +34,6 @@ split_query_text <-
 split_and_replace_query_text <-
   function(query_texts, query_number, page_length = 100) {
     c(query_texts[1:(query_number - 1)],
-      split_query(query_texts, query_number, page_length),
+      split_query_text(query_texts, query_number, page_length),
       query_texts[(query_number + 1):length(query_texts)])
   }

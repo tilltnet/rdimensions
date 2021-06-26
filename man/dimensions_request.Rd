@@ -6,7 +6,7 @@
 \usage{
 dimensions_request(
   dsl_query = "describe",
-  session_token = NULL,
+  session_token = getOption("dimensions_token"),
   fail_on_error = TRUE
 )
 }

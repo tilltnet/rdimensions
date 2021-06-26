@@ -1,2 +1,3 @@
-base_url <- "https://app.ds-metrics.com/api/"
-datasource_names <- c("publications", "researchers", "patents", "policy_documents", "clinical_trials", "grants")
+base_url <- "https://app.dimensions.ai/api/"
+datasource_names <- c("publications", "grants", "patents", "clinical_trials", "policy_documents", "researchers", "organizations", "datasets")
+

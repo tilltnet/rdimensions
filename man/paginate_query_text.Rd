@@ -6,7 +6,11 @@
 \alias{split_and_replace_query_text}
 \title{Create a pagination character vector to add to a query with more than 1000 results}
 \usage{
-paginate_query_text(query_text, page_length = 1000, session_token = NULL)
+paginate_query_text(
+  query_text,
+  page_length = 1000,
+  session_token = getOption("dimensions_token")
+)
 
 split_query_text(query_texts, query_number, page_length = 100)
 

@@ -8,8 +8,8 @@ Active subscription to [dimensions analytics](https://www.dimensions.ai/products
 
 Currently supported:
 
-- Sending multi-page queries
-- Converting JSON data into `data.frames`
+- sending multi-page queries
+- converting JSON data into `data.frames`
 - extract department and field of research for researchers
 - create network graphs from collaborations
 

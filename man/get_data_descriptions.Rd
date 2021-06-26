@@ -4,7 +4,7 @@
 \alias{get_data_descriptions}
 \title{Get descriptions of all dimensions.ai data sources}
 \usage{
-get_data_descriptions(token)
+get_data_descriptions(..., tidy_output = TRUE)
 }
 \arguments{
 \item{token}{Character containg a dimensions.ai API token, use get_token() to aquire token.}

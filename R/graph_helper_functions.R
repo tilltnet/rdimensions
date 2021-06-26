@@ -11,16 +11,16 @@ create_graph_from_bipartite_data <-
     graph <- bipartite.projection(bi_graph)[[projection_to_extract]]
 
     if (!is.null(node_attributes))
-      as_tbl_graph(graph) %>%
+      tidygraph::as_tbl_graph(graph) %>%
       left_join(node_attributes, by = c("name" = node_id))
     else
       graph
   }
 
-
+#' @export
 filter_graph_by_component_size <-
   function(graph, min_component_size = 3) {
-    comp <- components(graph)
+    comp <- igraph::components(graph)
     clusters_to_keep <- which(comp$csize >= min_component_size)
     print(paste0(
       comp$no,
@@ -40,7 +40,7 @@ filter_graph_by_component_size <-
 filter_graph_by_ids <-
   function(graph, ids) {
     graph %>%
-      as_tbl_graph() %>%
+      tidygraph::as_tbl_graph() %>%
       filter(name %in% ids)
   }
 

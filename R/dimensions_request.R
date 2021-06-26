@@ -2,17 +2,15 @@
 #' @export
 dimensions_request <-
   function(dsl_query = 'describe',
-           session_token = NULL,
+           session_token = getOption("dimensions_token"),
            fail_on_error = TRUE) {
     dsl_query <- pasta(dsl_query)
-    if (is.null(session_token)) {
-      if ("session_token" %in% ls(.GlobalEnv))
-        session_token <- .GlobalEnv$session_token
-      else
+
+      if (is.null(session_token))
         stop(
-          "No session_token found. Obtain session_token with get_token() and specify in dimensions_request()."
+          "No session_token found. Obtain session_token with dimensions_login()."
         )
-    }
+
     message("Sending request...")
     a <- httr::POST(
       paste0(base_url, "dsl.json"),

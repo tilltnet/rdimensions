@@ -10,7 +10,13 @@ get_token <-
         body = login,
         encode = "json"
       )
-    paste0("JWT ", httr::content(res)$token)
+    message(httr::http_status(res)$message)
+    stopifnot(httr::http_status(res)$categor == "Success")
+    token <- httr::content(res)$token
+    token <- paste0("JWT ", token)
+    options(dimensions_token = token)
+    message("Logged in. Token stored as global option.")
+    invisible(token)
   }
 
 
