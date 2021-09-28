@@ -5,10 +5,10 @@ create_graph_from_bipartite_data <-
            node_attributes = NULL,
            node_id = "researcher_id",
            projection_to_extract = 2) {
-    bi_graph <- graph_from_data_frame(edge_list, FALSE)
-    V(bi_graph)$type <- bipartite_mapping(bi_graph)$type
+    bi_graph <- igraph::graph_from_data_frame(edge_list, FALSE)
+    igraph::V(bi_graph)$type <- igraph::bipartite_mapping(bi_graph)$type
 
-    graph <- bipartite.projection(bi_graph)[[projection_to_extract]]
+    graph <- igraph::bipartite.projection(bi_graph)[[projection_to_extract]]
 
     if (!is.null(node_attributes))
       tidygraph::as_tbl_graph(graph) %>%
