@@ -105,8 +105,8 @@ dimensions_id_finder <- function() {
     # grid_ids and organization names for org selection ----
     grid_ids_ <- {
       data(grid_ids)
-      uf_gid <- gids[names(gids) == "University of Florida"]
-      gids <- gids[gids != uf_gid]
+      uf_gid <- gids[names(grid_ids) == "University of Florida"]
+      grid_ids <- gids[gids != uf_gid]
       c(
         "All Organzations" = "",
         uf_gid,
