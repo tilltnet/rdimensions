@@ -4,9 +4,10 @@
 get_grid_db <- function() {
   file_name <- tempfile("grid_db_file")
   grid_dir <- paste0(tempdir(), "/grid/")
-  xml2::read_html("https://doi.org/10.6084/m9.figshare.9963719") %>%
-    rvest::html_nodes("a.download-button") %>%
+  xml2::read_html("https://www.grid.ac/downloads") %>%
+    rvest::html_nodes("a.btn") %>%
     rvest::html_attr("href") %>%
+    .[1] |>
     utils::download.file(destfile = file_name)
 
   utils::unzip(file_name, exdir = grid_dir)
