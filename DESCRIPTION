@@ -15,7 +15,13 @@ Imports:
     httr,
     magrittr,
     data.table,
-    igraph
+    igraph,
+    DT,
+    reader,
+    readxl,
+    shiny,
+    tibble
 Depends:
+    R (>= 2.10),
     dplyr
 RoxygenNote: 7.1.1
