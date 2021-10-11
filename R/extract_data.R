@@ -5,7 +5,8 @@ extract_single_length_entries_df <-
         names(.)[.]
       } %>%
       dimensions_entry[.] %>%
-      as_tibble()
+      as_tibble() %>%
+      mutate(across(.fns = as.character))
   }
 
 extract_investigators <- function(entry) {
@@ -163,9 +164,11 @@ extract_data <-
                map(remaining_entries, ~ {
                  extract_single_length_entries_df(.)
                }),
-               map(remaining_entries, ~ {
-                 map_dfr(., function(y)
-                   extract_single_length_entries_df(y))
+               map(remaining_entries, function(x) {
+                 map_dfr(x, function(y){
+
+                   extract_single_length_entries_df(y)
+                   })
                }))
     res_l <- res_l[map_lgl(res_l, ~ nrow(.) > 0)]
     map(res_l,
