@@ -10,6 +10,9 @@ dimensions_request(
   fail_on_error = TRUE
 )
 }
+\arguments{
+\item{fail_on_error}{`Logical`, TRUE: raise an error if HTTP request fails, FALSE: warn.}
+}
 \description{
 Send DSL query to Dimensions API and collect results as list based on json structure
 }
