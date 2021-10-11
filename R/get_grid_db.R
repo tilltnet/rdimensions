@@ -7,7 +7,7 @@ get_grid_db <- function() {
   xml2::read_html("https://www.grid.ac/downloads") %>%
     rvest::html_nodes("a.btn") %>%
     rvest::html_attr("href") %>%
-    .[1] |>
+    .[1] %>%
     utils::download.file(destfile = file_name)
 
   utils::unzip(file_name, exdir = grid_dir)

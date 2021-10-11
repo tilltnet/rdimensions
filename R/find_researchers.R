@@ -4,16 +4,16 @@ find_researcher <- function(q) {
                              paginate = FALSE)
 
   dimensions_request(query[1]) %>%
-    {purrr::map(.$researchers, extract_data, data_source = "researchers")} |>
+    {purrr::map(.$researchers, extract_data, data_source = "researchers")} %>%
     bind_extracted_data()
 }
 
 get_researchers_data <-
   function(ur_id, data_source = "publications") {
     dimensions_search(data_source,
-                      search_filter = includes(list(researchers = ur_id))) |>
+                      search_filter = includes(list(researchers = ur_id))) %>%
       dimensions_request() %>%
-      {purrr::map(.[[data_source]], extract_data, data_source = data_source)} |>
+      {purrr::map(.[[data_source]], extract_data, data_source = data_source)} %>%
       bind_extracted_data()
   }
 
@@ -23,6 +23,7 @@ dimensions_id_finder <- function() {
   library(shiny)
   library(DT)
   library(reader)
+  library(searcher)
 
   ui <- fluidPage(
     tags$head(tags$style(
@@ -148,10 +149,10 @@ dimensions_id_finder <- function() {
       res <- values$researcher_data
       if (!is.null(input$filter_criteria)) {
         if (input$filter_criteria == "!is.na") {
-          res <- res |>
+          res <- res %>%
             filter(!is.na(!!sym(input$filter_column)))
         } else if (input$filter_criteria != "no filter") {
-          res <- res |>
+          res <- res %>%
             filter(!!sym(input$filter_column) == input$filter_criteria)
         }
       }
@@ -162,8 +163,8 @@ dimensions_id_finder <- function() {
 
         values$enriched_researcher_data$ur_id <-
           purrr::map2(res[[input$ur_id_column]],
-               values$enriched_researcher_data$ur_id, \(x, y) c(x, y) |>
-                 unique() |> na.omit() |> as.vector())
+               values$enriched_researcher_data$ur_id, function(x, y) c(x, y) %>%
+                 unique() %>% na.omit() %>% as.vector())
       }
 
       values$filtered_researcher_data <- res
@@ -184,7 +185,7 @@ dimensions_id_finder <- function() {
         choices = c(
           "!is.na",
           "no filter",
-          values$researcher_data[[input$filter_column]] |> unique()
+          values$researcher_data[[input$filter_column]] %>% unique()
         )
       )
     })
@@ -257,7 +258,7 @@ dimensions_id_finder <- function() {
     })
 
     observeEvent(input$search_google, {
-      res_data <- values$filtered_researcher_data |>
+      res_data <- values$filtered_researcher_data %>%
         slice(as.numeric(input$researcher_list))
       searcher::search_google(paste(res_data[as.numeric(input$data_columns)], collapse = " "),
                               rlang = FALSE)
@@ -277,8 +278,8 @@ dimensions_id_finder <- function() {
           "ur_ir_data.csv"
         },
         content = function(file) {
-          values$enriched_researcher_data |>
-            mutate(ur_id = purrr::map_chr(ur_id, paste, collapse = ", ")) |>
+          values$enriched_researcher_data %>%
+            mutate(ur_id = purrr::map_chr(ur_id, paste, collapse = ", ")) %>%
             write_csv(file)
         }
       )
@@ -292,7 +293,7 @@ dimensions_id_finder <- function() {
             mutate(values$filtered_researcher_data,
                    name = paste(
                      !!sym(input$first_name_column),!!sym(input$last_name_column)
-                   )) |>
+                   )) %>%
             pull(name)
           choices <- 1:length(choice_names)
           names(choices) <- choice_names
@@ -313,7 +314,7 @@ dimensions_id_finder <- function() {
                         selected = "find researcher's ID")
       purrr::map(
         c("custom_first_name", "custom_last_name"),
-        \(x) updateTextInput(session, inputId = x, value = "")
+        function(x) updateTextInput(session, inputId = x, value = "")
       )
     })
 
@@ -321,7 +322,7 @@ dimensions_id_finder <- function() {
 
     dimensions_main_df <-
       reactive({
-        res_data <- values$filtered_researcher_data |>
+        res_data <- values$filtered_researcher_data %>%
           slice(as.numeric(input$researcher_list))
 
         first_name <-
@@ -343,7 +344,7 @@ dimensions_id_finder <- function() {
         purrr::map2(
           c(res_data[[input$first_name_column]], res_data[[input$last_name_column]]),
           c("custom_first_name", "custom_last_name"),
-          \(x, y) updateTextInput(session, inputId = y, placeholder = x)
+          function(x, y) updateTextInput(session, inputId = y, placeholder = x)
         )
 
         output$search_text <-
@@ -367,7 +368,7 @@ dimensions_id_finder <- function() {
           find_researcher(q)
 
         main_df <-
-          qres$main_df |>
+          qres$main_df %>%
           as_tibble()
 
         isolate(ur_ids_ <- ur_ids())
@@ -379,15 +380,15 @@ dimensions_id_finder <- function() {
             qres2 <- find_researcher(list(id = ur_ids_))
 
             main_df2 <-
-              qres2$main_df |>
+              qres2$main_df %>%
               as_tibble()
 
             if (!is.null(qres2$main_df)) {
 
               main_df <-
-                bind_rows(main_df, main_df2) |>
+                bind_rows(main_df, main_df2) %>%
                 distinct()
-              qres <- bind_extracted_data(list(qres, qres2)) |>
+              qres <- bind_extracted_data(list(qres, qres2)) %>%
                 purrr::map(distinct)
             }
           }
@@ -395,15 +396,15 @@ dimensions_id_finder <- function() {
 
         if (!is.null(qres$main_df) & !is.null(qres$research_orgs)) {
           main_df <-
-            main_df |>
+            main_df %>%
             filter(obsolete != 1)
 
-          main_df |>
+          main_df %>%
             left_join(
-              qres$research_orgs |>
-                filter(xid %in% main_df$xid) |>
-                group_by(xid) |>
-                group_modify(\(x, ...) tibble(empl_history = paste(
+              qres$research_orgs %>%
+                filter(xid %in% main_df$xid) %>%
+                group_by(xid) %>%
+                group_modify(function(x, ...) tibble(empl_history = paste(
                   "•",
                   paste(
                     x$name,
@@ -416,7 +417,7 @@ dimensions_id_finder <- function() {
                 )))
             )
         } else if(!is.null(qres$main_df)) {
-          main_df |>
+          main_df %>%
             filter(obsolete != 1)
         } else {
           tibble(id = character(0),
@@ -434,9 +435,9 @@ dimensions_id_finder <- function() {
 
     output$finder_ui <- renderDT({
       isolate(selected <-
-                dimensions_main_df()$id %in% ur_ids() |> which())
+                dimensions_main_df()$id %in% ur_ids() %>% which())
 
-      dimensions_main_df() |>
+      dimensions_main_df() %>%
         mutate(id = paste0(
           "<a target = '_blank' href=",
           dimensions_url,
@@ -446,13 +447,13 @@ dimensions_id_finder <- function() {
         ),
         name = paste(first_name, last_name, id, sep = "<br>"),
         publications = ifelse(total_publications > 0, paste0(total_publications, " (", first_publication_year, " - ", last_publication_year,")"), "0"),
-        grants = ifelse(total_grants > 0, paste0(total_grants, " (", first_grant_year, " - ", last_grant_year,")"), "0")) |>
+        grants = ifelse(total_grants > 0, paste0(total_grants, " (", first_grant_year, " - ", last_grant_year,")"), "0")) %>%
         select(
           name,
           contains("empl_history"),
           publications,
           grants
-        ) |>
+        ) %>%
         datatable(
           escape = FALSE,
           selection = list(mode = 'multiple', selected = selected),
