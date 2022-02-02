@@ -10,7 +10,7 @@ dimensions_search(
   search_term = NULL,
   search_filter = NULL,
   return = search_source,
-  return_fields = "all",
+  return_fields = "basics+abstract+extras+book",
   sort_by = NULL,
   paginate = TRUE,
   page_length = 1000,

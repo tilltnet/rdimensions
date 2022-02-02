@@ -2,7 +2,10 @@
 #' @export
 paginate_query_text <- function(query_text, page_length = 1000, session_token = getOption("dimensions_token")) {
   query_text <- pasta(query_text)
-  result_count <- dimensions_request(dsl_query = query_text, session_token = session_token)$`_stats`$total_count
+
+  result_count <- dimensions_request(dsl_query = query_text, session_token = session_token, auto.extract = FALSE)
+  result_count <- attr(result_count, "meta")$`_stats`$total_count
+
   query_text <- strsplit(query_text, " limit")[[1]][1]
   iterations <- ceiling(result_count / page_length)
   skips <- c(0, 1:{

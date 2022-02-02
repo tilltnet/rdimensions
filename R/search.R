@@ -14,7 +14,7 @@ dimensions_search <-
   search_term = NULL,
   search_filter = NULL,
   return = search_source,
-  return_fields = "all",
+  return_fields = "basics+abstract+extras+book",
   sort_by = NULL,
   paginate = TRUE,
   page_length = 1000,
@@ -46,8 +46,8 @@ dimensions_search <-
     if (!is.null(sort_by))
       cq <- paste(cq, "sort by", sort_by)
 
-    if(print_query) print(cq)
-    if(paginate) return(invisible(paginate_query_text(cq, page_length, session_token = session_token)))
+    if (print_query) print(cq)
+    if (paginate) return(invisible(paginate_query_text(cq, page_length, session_token = session_token)))
     invisible(paste(cq, "limit 1000 skip 0"))
   }
 

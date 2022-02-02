@@ -1,14 +1,14 @@
 #' Get descriptions of all dimensions.ai data sources
-#' @param token Character containg a dimensions.ai API token, use get_token() to aquire token.
+#' @param token Character containing a dimensions.ai API token, use get_token() to acquire token.
 #' @import purrr
 #' @export
-get_data_descriptions <-
+get_source_descriptions <-
   function(..., tidy_output = TRUE) {
-    source_names <- dimensions_request()$sources
+    source_names <- dimensions_request(describe = TRUE)$sources
     source_names <- setNames(source_names, source_names)
     res <- purrr::map(source_names,
                       function(x)
-                        dimensions_request(paste('describe source', x), ...))
+                        dimensions_request(paste('describe source', x), ..., describe = TRUE))
     if (tidy_output)
       tidy_description(res)
     else

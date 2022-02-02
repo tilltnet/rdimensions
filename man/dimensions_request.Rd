@@ -2,17 +2,27 @@
 % Please edit documentation in R/dimensions_request.R
 \name{dimensions_request}
 \alias{dimensions_request}
-\title{Send DSL query to Dimensions API and collect results as list based on json structure}
+\title{Send request to the Dimensions API}
 \usage{
 dimensions_request(
   dsl_query = "describe",
   session_token = getOption("dimensions_token"),
-  fail_on_error = TRUE
+  fail_on_error = TRUE,
+  describe = FALSE,
+  auto.extract = TRUE
 )
 }
 \arguments{
+\item{dsl_query}{`Character`, expressing request using [Dimensions API DSL](https://docs.dimensions.ai/dsl/api.html).}
+
+\item{session_token}{`Character`, Dimensions API session token.}
+
 \item{fail_on_error}{`Logical`, TRUE: raise an error if HTTP request fails, FALSE: warn.}
+
+\item{describe}{`Logical`, set true if API self-description commands ('describe' or 'describe source ...') are used.}
+
+\item{auto.extract}{`Logical`, determines if the received data is processed and returned as a list of `data.frames`. If `FALSE`, data is returned as a nested list representing the JSON structure; `extract_fields()` can be used to turn it into a list of `data.frames`.}
 }
 \description{
-Send DSL query to Dimensions API and collect results as list based on json structure
+Requests can be for data or API self-description ('describe' or 'describe source ...'). With `auto.extract = TRUE` the data will be returned as a list of `data.frames`.
 }

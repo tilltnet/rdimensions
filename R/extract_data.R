@@ -29,8 +29,10 @@ extract_investigators <- function(entry) {
 
 extract_authors <-
   function(entry) {
+    entry <- entry |> map(zap_null)
     a <- map(entry, ~map(., try_to_get) %>% as_tibble(.) %>% mutate_all(as.character))
     a <- map(a, ~.[!map_lgl(., is.list)])
+    a <- map(a, \(x) select(x, -contains("orcid")))
     b <- map(entry, function(x) {
       list_elements <- x[map_lgl(x, ~(!is.atomic(.)))]
       list_elements <- list_elements[names(list_elements) != "raw_affiliation" ]
@@ -44,7 +46,8 @@ extract_authors <-
         select(-id)
       else if (nrow(res) == 1) res
     })
-    map2_dfr(a, b, ~ bind_cols(.x, .y), id = "author_id")
+    map2(a, b, ~ bind_cols(.x, .y, .name_repair = make.names)) |>
+      bind_rows()
   }
 
 extract_researcher_research_orgs <-
@@ -180,7 +183,7 @@ extract_data <-
 #' @export
 bind_extracted_data <-
   function(result_list) {
-    results_concat <- do.call(c, result_list)
+    results_concat <- do.call(`c`, result_list)
 
     res <-  names(results_concat) %>% unique() %>%
       map( ~ bind_rows(results_concat[names(results_concat) == .]))
