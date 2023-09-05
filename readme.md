@@ -1,7 +1,5 @@
 # rdimensions
 
-This is an early development version!
-
 R Package to access ([dimensions.ai](http://www.dimensions.ai)) API.
 
 Active subscription to [dimensions analytics](https://www.dimensions.ai/products/dimensions-analytics/) required.
